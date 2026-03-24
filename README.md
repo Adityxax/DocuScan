@@ -4,42 +4,36 @@ DocuScan Pro is a lean, professional-grade "Photo-to-Document" utility. It trans
 
 ## ✨ Key Features
 
-- **Multi-Page Scanning**: Upload several photos at once and merge them into a single, consolidated PDF.
-- **Intelligent Enhancement**: High-contrast B&W and vibrant Color modes for professional document output.
-- **Minimalist UX**: Streamlined "one-click" experience with instant previews and direct downloads.
-- **Session History**: Easily re-download or preview your recent scans from a convenient session list.
-- **Privacy First**: Optimized for local processing with zero unnecessary external AI dependencies.
+- **Multi-Page Merging**: Select multiple photos and merge them into a single, consolidated PDF.
+- **Color & B&W Options**: High-quality document enhancement with a minimalist toggle.
+- **Direct Download**: PDF documents are saved directly to your device's Downloads folder.
+- **Document Preview**: Instant preview of the final PDF in a new tab.
+- **Session History**: Easily re-download or preview your recent scans.
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Python, Flask, OpenCV (Image Processing), img2pdf.
-- **Frontend**: Vanilla HTML5, CSS3 (Modern, responsive UI), JavaScript.
-- **Performance**: Deeply optimized OpenCV pipeline for low-latency document enhancement.
+- **Backend**: Python, Flask, OpenCV, img2pdf.
+- **Frontend**: Vanilla HTML5, CSS3, JavaScript.
 
 ## 🚀 Quick Start
 
-### 1. Project Setup
-Ensure you have Python 3.8+ installed.
-
 ```bash
-# Clone the repository
+# Clone
 git clone https://github.com/Adityxax/DocuScan.git
 cd DocuScan
 
-# Create and activate virtual environment
+# Setup Venv
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source .venv/bin/activate # Windows: .venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Run the Application
-```bash
+# Run
 cd backend
 python app.py
 ```
-Open `http://localhost:5000` in your browser to start scanning.
+
+## 👤 Author
+**Adiii**
+[GitHub Profile](https://github.com/Adityxax)
 
 ## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License.
