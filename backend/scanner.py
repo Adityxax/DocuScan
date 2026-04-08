@@ -50,7 +50,7 @@ def detect_document_corners(image_path: str):
 
     for c in contours:
         area_small = cv2.contourArea(c)
-        if area_small < (small.shape[0] * small.shape[1] * 0.10): continue
+        if area_small < (small.shape[0] * small.shape[1] * 0.05): continue
         peri   = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.02 * peri, True)
         if len(approx) == 4:

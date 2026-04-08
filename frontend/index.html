@@ -113,6 +113,14 @@
     .history-info strong { font-size: 0.85rem; display: block; }
     .history-info span { font-size: 0.7rem; color: var(--muted); }
     .history-dl { color: var(--accent); }
+    .preview-item .remove-btn {
+      position: absolute; top: 6px; right: 6px; width: 22px; height: 22px;
+      background: var(--accent); color: white; border-radius: 50%;
+      border: none; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: 10px; font-weight: bold;
+      opacity: 0.9; transition: 0.2s; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .preview-item .remove-btn:hover { transform: scale(1.1); background: var(--text); color: var(--accent); }
     .error-box { display: none; background: var(--error-bg); color: var(--error-text); padding: 12px; border-radius: 10px; font-size: 0.85rem; text-align: center; }
   </style>
 </head>
@@ -180,24 +188,46 @@
     document.getElementById('mode-color').classList.toggle('active', mode === 'color');
   }
   document.getElementById("file-input").addEventListener("change", function() {
-    selectedFiles = Array.from(this.files);
-    if (selectedFiles.length === 0) return;
+    const newFiles = Array.from(this.files);
+    selectedFiles = [...selectedFiles, ...newFiles];
+    this.value = ""; // Clear to allow re-selection of same file
+    renderPreviews();
+  });
+  function renderPreviews() {
     const grid = document.getElementById("preview-grid");
-    grid.innerHTML = ""; grid.style.display = "grid";
+    grid.innerHTML = "";
+    if (selectedFiles.length === 0) {
+      grid.style.display = "none";
+      document.getElementById("mode-bar").style.display = "none";
+      document.getElementById("preview-count").style.display = "none";
+      document.getElementById("scan-btn").style.display = "none";
+      return;
+    }
+    grid.style.display = "grid";
     document.getElementById("mode-bar").style.display = "flex";
-    selectedFiles.forEach(file => {
-      const reader = new FileReader();
+    document.getElementById("preview-count").style.display = "block";
+    document.getElementById("preview-count").textContent = `${selectedFiles.length} page(s) selected`;
+    document.getElementById("scan-btn").style.display = "block";
+    document.getElementById("error-box").style.display = "none";
+    
+    selectedFiles.forEach((file, idx) => {
       const item = document.createElement("div");
       item.className = "preview-item";
-      reader.onload = e => { item.innerHTML = `<img src="${e.target.result}"/>`; };
+      const reader = new FileReader();
+      reader.onload = e => { 
+        item.innerHTML = `
+          <img src="${e.target.result}"/>
+          <button class="remove-btn" onclick="removeFile(${idx})">✕</button>
+        `; 
+      };
       reader.readAsDataURL(file);
       grid.appendChild(item);
     });
-    document.getElementById("preview-count").textContent = `${selectedFiles.length} page(s) selected`;
-    document.getElementById("preview-count").style.display = "block";
-    document.getElementById("scan-btn").style.display = "block";
-    document.getElementById("error-box").style.display = "none";
-  });
+  }
+  function removeFile(idx) {
+    selectedFiles.splice(idx, 1);
+    renderPreviews();
+  }
   async function scanDocuments() {
     if (selectedFiles.length === 0) return;
     const btn = document.getElementById("scan-btn");

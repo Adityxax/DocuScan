@@ -4,6 +4,7 @@ app.py — Simplified Backend
 
 import os
 import uuid
+import time
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from scanner import scan_document
 from pdf_utils import images_to_pdf
@@ -18,6 +19,19 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 ALLOWED_EXT = {"png", "jpg", "jpeg", "webp"}
+
+def cleanup_temp_files():
+    """Removes files older than 6 hours in uploads and outputs."""
+    now = time.time()
+    for folder in [UPLOAD_DIR, OUTPUT_DIR]:
+        if not os.path.exists(folder): continue
+        for f in os.listdir(folder):
+            path = os.path.join(folder, f)
+            # Only remove files, avoid deleting directories if any
+            if os.path.isfile(path):
+                if os.path.getmtime(path) < now - (6 * 3600):
+                    try: os.remove(path)
+                    except: pass
 
 def allowed(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXT
@@ -95,4 +109,5 @@ def download(filename):
     return send_file(path, as_attachment=True)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    cleanup_temp_files()
+    app.run(debug=False, host="0.0.0.0", port=5000)
